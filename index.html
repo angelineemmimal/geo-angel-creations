@@ -929,13 +929,13 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>Phone Number / WhatsApp *</label>
-                        <input type="tel" id="custPhone" required placeholder="+1 234 567 890">
+                        <input type="tel" id="custPhone" required placeholder="+91 98765 43210">
                     </div>
                     <div class="form-group">
                         <label>Payment Method *</label>
                         <select id="custPayment">
-                            <option value="WhatsApp Direct / UPI">WhatsApp Direct Order</option>
-                            <option value="PayPal">PayPal Instant</option>
+                            <option value="WhatsApp Direct / UPI">WhatsApp Direct / UPI</option>
+                            <option value="GPay / PhonePe / Paytm">GPay / PhonePe / Paytm</option>
                             <option value="Cash on Delivery">Cash on Delivery</option>
                         </select>
                     </div>
@@ -943,7 +943,7 @@
 
                 <div class="form-group">
                     <label>Delivery Address *</label>
-                    <textarea id="custAddress" rows="3" required placeholder="Street address, city, zip code"></textarea>
+                    <textarea id="custAddress" rows="3" required placeholder="Street address, city, state, pincode"></textarea>
                 </div>
 
                 <div class="form-group">
@@ -988,7 +988,7 @@
                     </div>
                     <div class="form-group">
                         <label>Price (₹) *</label>
-                        <input type="number" step="0.01" id="pPrice" required placeholder="15.00">
+                        <input type="number" step="0.01" id="pPrice" required placeholder="150.00">
                     </div>
                 </div>
 
@@ -1018,8 +1018,8 @@
 
             <h4 style="color:var(--primary); margin-bottom:1rem;">Store Contact Configuration</h4>
             <div class="form-group">
-                <label>WhatsApp Order Receiving Number (with country code)</label>
-                <input type="text" id="adminPhone" placeholder="15551234567" value="15551234567">
+                <label>WhatsApp Order Receiving Number (with country code, e.g. 919876543210)</label>
+                <input type="text" id="adminPhone" placeholder="919876543210" value="919876543210">
                 <small style="color:var(--text-muted)">Orders will open in WhatsApp directed to this number.</small>
             </div>
             <button onclick="saveAdminSettings()" class="btn-submit" style="margin-top:8px;">Save Settings</button>
@@ -1061,13 +1061,13 @@
        JAVASCRIPT APPLICATION LOGIC
        ========================================================================== -->
     <script>
-        // Sample Default Products Catalog
+        // Sample Default Products Catalog (In Indian Rupees ₹)
         const initialProducts = [
             {
                 id: 1,
                 title: "Crunchy Butter Murukku",
                 category: "Snacks",
-                price: 8.99,
+                price: 150.00,
                 unit: "250g Pack",
                 stock: 25,
                 image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=80",
@@ -1077,7 +1077,7 @@
                 id: 2,
                 title: "Golden Banana Chips",
                 category: "Snacks",
-                price: 6.50,
+                price: 120.00,
                 unit: "200g Pack",
                 stock: 18,
                 image: "https://images.unsplash.com/photo-1621996346565-e3d5d6281352?auto=format&fit=crop&w=600&q=80",
@@ -1087,7 +1087,7 @@
                 id: 3,
                 title: "Gold Leaf Resin Coaster Set",
                 category: "Resin Art",
-                price: 24.00,
+                price: 450.00,
                 unit: "Set of 2",
                 stock: 10,
                 image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
@@ -1097,7 +1097,7 @@
                 id: 4,
                 title: "Alphabet Floral Keychain",
                 category: "Resin Art",
-                price: 12.00,
+                price: 250.00,
                 unit: "1 Piece",
                 stock: 15,
                 image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=600&q=80",
@@ -1107,7 +1107,7 @@
                 id: 5,
                 title: "Pastel Pearl Bead Necklace",
                 category: "Beads Art",
-                price: 18.50,
+                price: 350.00,
                 unit: "1 Piece",
                 stock: 12,
                 image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80",
@@ -1117,7 +1117,7 @@
                 id: 6,
                 title: "Crystal Phone Charm Strap",
                 category: "Beads Art",
-                price: 9.99,
+                price: 180.00,
                 unit: "1 Piece",
                 stock: 20,
                 image: "https://images.unsplash.com/photo-1611591475824-28b332b1ed22?auto=format&fit=crop&w=600&q=80",
@@ -1129,7 +1129,7 @@
         let products = JSON.parse(localStorage.getItem('geo_products')) || initialProducts;
         let cart = JSON.parse(localStorage.getItem('geo_cart')) || [];
         let activeCategory = 'All';
-        let whatsappNumber = localStorage.getItem('geo_wa_num') || "15551234567";
+        let whatsappNumber = localStorage.getItem('geo_wa_num') || "919876543210";
 
         // Initialization
         document.addEventListener('DOMContentLoaded', () => {
@@ -1185,7 +1185,7 @@
                             <span>In Stock: ${product.stock}</span>
                         </div>
                         <div class="product-footer">
-                            <span class="price-tag">$${parseFloat(product.price).toFixed(2)}</span>
+                            <span class="price-tag">₹${parseFloat(product.price).toFixed(2)}</span>
                             <button class="btn-add-cart" onclick="addToCart(${product.id})">
                                 <i class="fa-solid fa-cart-plus"></i> Add
                             </button>
@@ -1245,7 +1245,7 @@
             const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
             cartCount.textContent = totalItems;
-            cartTotal.textContent = `$${totalPrice.toFixed(2)}`;
+            cartTotal.textContent = `₹${totalPrice.toFixed(2)}`;
 
             if (cart.length === 0) {
                 container.innerHTML = `
@@ -1262,7 +1262,7 @@
                     <img src="${item.image}" alt="${item.title}">
                     <div class="cart-item-info">
                         <div class="cart-item-title">${item.title}</div>
-                        <div class="cart-item-price">$${parseFloat(item.price).toFixed(2)}</div>
+                        <div class="cart-item-price">₹${parseFloat(item.price).toFixed(2)}</div>
                         <div class="cart-qty-controls">
                             <button class="qty-btn" onclick="updateQty(${item.id}, -1)">-</button>
                             <span style="font-size:0.85rem; font-weight:600;">${item.qty}</span>
@@ -1324,10 +1324,10 @@
             cart.forEach((item, index) => {
                 const sub = item.price * item.qty;
                 total += sub;
-                orderText += `${index + 1}. ${item.title} (${item.category}) x${item.qty} - $${sub.toFixed(2)}\n`;
+                orderText += `${index + 1}. ${item.title} (${item.category}) x${item.qty} - ₹${sub.toFixed(2)}\n`;
             });
 
-            orderText += `\n*TOTAL AMOUNT:* $${total.toFixed(2)}`;
+            orderText += `\n*TOTAL AMOUNT:* ₹${total.toFixed(2)}`;
 
             const waURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(orderText)}`;
             
